@@ -8,7 +8,7 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     // Contoh sederhana, sesuaikan dengan kebutuhan Anda
-    if ($username === 'elon' && $password === 'password') {
+    if ($username === 'sori' && $password === '17181213') {
         $_SESSION['username'] = $username; // Set session username
         header("Location: index.php"); // Redirect ke halaman utama setelah login berhasil
         exit();

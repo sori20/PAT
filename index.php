@@ -29,7 +29,7 @@ if (isset($_POST['add_task'])) {
 }
 
 // Handle edit task
-if (isset($_POST['edit_task'])) {
+if (isset($_POST['save_task'])) {
     $task_id = $_POST['task_id'];
     $task_name = $_POST['task_name'];
     $description = $_POST['description'];
@@ -51,6 +51,12 @@ if (isset($_POST['delete_task'])) {
 
 // Ambil semua task
 $tasks = $taskObj->getAllTasks();
+
+// Jika ada task yang akan di-edit
+$edit_task = null;
+if (isset($_POST['edit_task'])) {
+    $edit_task = $taskObj->getTask($_POST['task_id']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -79,9 +85,6 @@ $tasks = $taskObj->getAllTasks();
                             <!-- Form untuk edit task -->
                             <form action="index.php" method="POST" class="float-right">
                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                <input type="hidden" name="task_name" value="<?php echo $task['task_name']; ?>">
-                                <input type="hidden" name="description" value="<?php echo $task['description']; ?>">
-                                <input type="hidden" name="due_date" value="<?php echo $task['due_date']; ?>">
                                 <button type="submit" name="edit_task" class="btn btn-sm btn-primary mr-2">Edit</button>
                             </form>
                             <!-- Form untuk hapus task -->
@@ -90,6 +93,26 @@ $tasks = $taskObj->getAllTasks();
                                 <button type="submit" name="delete_task" class="btn btn-sm btn-danger">Delete</button>
                             </form>
                         </li>
+                        <?php if ($edit_task && $edit_task['id'] == $task['id']): ?>
+                            <li class="list-group-item">
+                                <form action="index.php" method="POST">
+                                    <input type="hidden" name="task_id" value="<?php echo $edit_task['id']; ?>">
+                                    <div class="form-group">
+                                        <label for="task_name">Task Name</label>
+                                        <input type="text" id="task_name" name="task_name" class="form-control" value="<?php echo $edit_task['task_name']; ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea id="description" name="description" class="form-control" required><?php echo $edit_task['description']; ?></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="due_date">Due Date</label>
+                                        <input type="date" id="due_date" name="due_date" class="form-control" value="<?php echo $edit_task['due_date']; ?>" required>
+                                    </div>
+                                    <button type="submit" name="save_task" class="btn btn-primary">Save Task</button>
+                                </form>
+                            </li>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
             </div>
